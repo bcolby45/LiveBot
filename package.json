@@ -1,5 +1,5 @@
 {
-  "name": "fbstreamint",
+  "name": "livebot",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -10,8 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
-    "bad-words": "^3.0.0",
     "cors": "^2.8.5",
     "eventsource": "^1.0.7",
     "express": "^4.16.4",
@@ -19,10 +17,13 @@
     "https": "^1.0.0",
     "ignore-warnings": "^0.2.1",
     "nodemon": "^1.18.7",
-    "tmi.js": "^1.2.1",
     "websocket": "^1.0.28",
-    "ws": "^6.1.2",
-    "xmldom": "^0.1.27",
-    "xpath": "0.0.27"
+    "ws": "^6.1.2"
+  },
+  "devDependencies": {
+    "babel-loader": "^8.0.5",
+    "eslint": "^5.15.1",
+    "eslint-config-google": "^0.12.0",
+    "webpack": "^4.29.6"
   }
 }

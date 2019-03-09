@@ -1,1 +1,4 @@
 node_modules
+prod.js
+min.js
+public/min.js
