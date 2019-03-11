@@ -1,6 +1,3 @@
-/* eslint-disable semi */
-/* eslint-disable linebreak-style */
-/* eslint-disable max-len */
 'use strict'
 const express = require('express');
 const app = express().enable('trust proxy');
@@ -14,10 +11,11 @@ const fbsdk = require('facebook-sdk');
 const ws = new WebSocketServer({
   server: webServer,
 });
+let limited = false;
 const appID = ``;
 const appSecret = ``;
 const postId = ``;
-const accessToken = `EAAFhceAP8u0BAID95sV1oYI9XrjM3zDT5s4t9WX6E8O1ZCRXUU2ZBOIcJZAWkL2SrNZBy4SimCsY2f8ZCMerfTNR566eETriH0R67QSJyv5ZCub5wZCTkpG18k6J0FC7ZCXJ5PmYrIfGqUtVo3o4vVQ9e2g2v4h5K0UZD`;
+const accessToken = ``;
 process.on('uncaughtException', function(err) { // I don't like killing the process when one of my libraries fucks up.
   console.log('UNCAUGHT EXCEPTION\n' + err)
 });
@@ -39,7 +37,7 @@ source.onopen = (event) => {
   };
   source.onmessage = (event) => {
     const info = JSON.parse(event.data);
-    const check = info.message.toString();
+    const check = info.message;
     const httpCheck = check.slice(0, 4);
     if (httpCheck == 'http') {
       wsHtml(check);
@@ -81,54 +79,40 @@ const wsAlert = (alertStr) => {
   wsBroadcast(newAlert);
 };
 const wsHtml = (link) => {
-  let data;
+    let data;
     let html = link;
     const videoId = html.slice(html.length - 11, html.length);
     html = `https://www.youtube.com/watch?v=${videoId}`;
-    console.log(html);
-    if (videos.has(videoId)) {
-      console.log(`Video has already been played.`);
-      return;
-    } else {
-      videos.set(videoId);
-    }
+    if (videos.has(videoId)) {return;} else {videos.set(videoId);}
     https.get(html, (res) => {
-      console.log('statusCode:', res.statusCode);
       res.on('data', (d) => {
         data = data + d;
       });
       res.on('end', () => {
         data = data.toString();
-        console.log('end');
-        if (data.includes(`Licensed to YouTube by`)) {
-          console.log(`There is copyrighted music in this video.`);
-          return;
-        }
-        if (data.includes('Unlisted')) {
-          console.log(`Unlisted`);
-          return;
-        }
-        if (data.includes('Age-restricted')) {
-          console.log(`Age-restricted`);
-          return;
-        }
+        if (data.includes(`Licensed to YouTube by`)) {return;}
+        if (data.includes('Unlisted')) {return;}
+        if (data.includes('Age-restricted')) {return;}
         const newData = JSON.stringify({
           html: videoId,
         });
         wsBroadcast(newData);
       });
     });
+
 };
 const wsSkip = () => {
-    console.log(`SKIP`);
+  if(!limited) {
+  limited = true;
+  setTimeout(function() {
+    limited = false;
+  }, 5000);
     const newData = JSON.stringify({
       skip: 'skip',
     });
     wsBroadcast(newData);
+  }
 };
-setInterval(function() {
-  videos.clear();
-}, 1200000);
 app.use(cors());
 app.use('/', express.static(__dirname + '/public/'));
 webServer.listen(7004, function listening() {
