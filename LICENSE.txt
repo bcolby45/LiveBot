@@ -1,11 +1,8 @@
-SeaFour License [C4L]
+Livebot License [LBL]
 
 Copyright (c) 2019 - Brandon Colby
 
-The use of this media or work for any purpose in accordance
-with United States Federal Law and the 1776 constitution of
-the United States of America is permitted under this license,
-subject to the following rules:
+The use of this media or work for any purpose is permitted under this license, subject to the following rules:
 
 I.   The new media or work must not intentionally obfuscate its function.
 
@@ -17,3 +14,5 @@ III. The new media or work must contain this notice in any
 
 IV.  The new media or work must not claim to be the same as
      the original, unmodified work.
+     
+V.  All modifications must be documented and made publically available.
