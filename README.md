@@ -11,3 +11,4 @@
 10. In your powershell or cmd window, type in "npm start"
 11. The OBS browser source should connect to the server automatically. You are now good to go!
 
+More info about the the Live Comments API is available here: https://developers.facebook.com/docs/graph-api/server-sent-events/endpoints/live-comments/
