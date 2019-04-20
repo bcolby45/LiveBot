@@ -50,33 +50,6 @@ const init = () => {
       const num2 = Math.floor(Math.random() * 99999999 + 1);
       const areaNum = `area-${num}`;
       const areaDOM = document.getElementById(areaNum);
-      if (special) {
-        if (special == `red`) {
-          const alert = alert.substring(6, alert.length);
-          areaDOM.innerHTML =
-                        `
-                <marquee scrollamount="20"><p style="color:red" id="${num2}"></p></marquee>
-                        `
-          document.getElementById(num2).textContent = alert;
-          speakAlert(alert);
-        } else if (special == `green`) {
-          const alert = alert.substring(8, alert.length);
-          areaDOM.innerHTML =
-                        `
-                <marquee scrollamount="20"><p style="color:#8F9749;" id="${num2}"></p></marquee>
-                        `
-          document.getElementById(num2).textContent = alert;
-          speakAlert(alert);
-        } else if (special = `rainbow`) {
-          const alert = alert.substring(10, alert.length);
-          areaDOM.innerHTML =
-                        `
-                <marquee scrollamount="20"><p class="rainbow" id="${num2}"></p></marquee>
-                        `
-          document.getElementById(num2).textContent = alert;
-          speakAlert(alert);
-        }
-      } else {
         areaDOM.innerHTML =
                     `
         <marquee scrollamount="20"><p style="color:white" id="${num2}"></p></marquee>
@@ -84,25 +57,12 @@ const init = () => {
         document.getElementById(num2).textContent = alert;
         speakAlert(alert);
       }
-    }
     /* End */
     const parsedData = JSON.parse(message.data);
     if (parsedData.alert) {
       const alertInfo = parsedData.alert;
-      /* Check for special commands */
-      if (alertInfo.includes(`[red]`)) {
-        const special = `red`;
-        processAlert(alertInfo, special);
-      } else if (alertInfo.includes(`[green]`)) {
-        const special = `green`;
-        processAlert(alertInfo, special);
-      } else if (alertInfo.includes(`[rainbow]`)) {
-        const special = `rainbow`;
-        processAlert(alertInfo, special);
-      } else {
         processAlert(alertInfo);
       }
-    }
     if (parsedData.html) {
       newVideo = parsedData.html;
       let num3 = Math.floor(Math.random() * 99999999 + 1);
