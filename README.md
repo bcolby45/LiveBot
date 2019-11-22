@@ -1,5 +1,4 @@
 # How do I start up LiveBot?
-0. Brody Argo
 1. Download OBS (Open Broadcast Software)
 2. Add a browser source and point it to localhost:7004
 3. Open up powershell or cmd and navigate to the folder where you saved LiveBot
