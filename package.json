@@ -18,7 +18,7 @@
     "ignore-warnings": "^0.2.1",
     "nodemon": "^1.18.7",
     "websocket": "^1.0.28",
-    "ws": "^6.1.2"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "babel-loader": "^8.0.5",
