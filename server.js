@@ -16,7 +16,7 @@ const appID = ``;
 const appSecret = ``;
 const postId = ``;
 const accessToken = ``;
-process.on('uncaughtException', function(err) { // I don't like killing the process when one of my libraries fucks up.
+process.on('uncaughtException', function (err) { // I don't like killing the process when one of my libraries fucks up.
   console.log('UNCAUGHT EXCEPTION\n' + err)
 });
 const facebook = new fbsdk.Facebook({
@@ -26,7 +26,7 @@ const facebook = new fbsdk.Facebook({
 const source = new EventSource(`https://streaming-graph.facebook.com/${postId}/live_comments?access_token=${accessToken}&comment_rate=one_hundred_per_second&fields=from{name,id},message`);
 const clients = new Map();
 const videos = new Map();
-facebook.api(appID, function(data) {
+facebook.api(appID, function (data) {
   console.log(data);
 });
 source.onopen = (event) => {
@@ -39,16 +39,10 @@ source.onopen = (event) => {
     const info = JSON.parse(event.data);
     const check = info.message;
     const httpCheck = check.slice(0, 4);
-    if (httpCheck == 'http') {
+    if (httpCheck.match('http')) {
       wsHtml(check);
-    } else if (httpCheck == 'www.') {
+    } else if (httpCheck.match(`www.\g`) || httpCheck.match(`skip\g`)) {
       wsHtml(check);
-    } else if (httpCheck == 'Skip') {
-      wsSkip();
-    } else if (httpCheck == 'skip') {
-      wsSkip();
-    } else if (httpCheck == 'SKIP') {
-      wsSkip();
     } else {
       wsAlert(info.message);
     }
@@ -66,7 +60,7 @@ ws.on('connection', function connection(ws, req) {
   });
 });
 const wsBroadcast = (data) => {
-  clients.forEach(function(client) {
+  clients.forEach(function (client) {
     if (client.socket.readyState == 1) {
       client.socket.send(data);
     }
@@ -79,34 +73,34 @@ const wsAlert = (alertStr) => {
   wsBroadcast(newAlert);
 };
 const wsHtml = (link) => {
-    let data;
-    let html = link;
-    const videoId = html.slice(html.length - 11, html.length);
-    html = `https://www.youtube.com/watch?v=${videoId}`;
-    if (videos.has(videoId)) {return;} else {videos.set(videoId);}
-    https.get(html, (res) => {
-      res.on('data', (d) => {
-        data = data + d;
-      });
-      res.on('end', () => {
-        data = data.toString();
-        if (data.includes(`Licensed to YouTube by`)) {return;}
-        if (data.includes('Unlisted')) {return;}
-        if (data.includes('Age-restricted')) {return;}
-        const newData = JSON.stringify({
-          html: videoId,
-        });
-        wsBroadcast(newData);
-      });
+  let data;
+  let html = link;
+  const videoId = html.slice(html.length - 11, html.length);
+  html = `https://www.youtube.com/watch?v=${videoId}`;
+  if (videos.has(videoId)) { return; } else { videos.set(videoId); }
+  https.get(html, (res) => {
+    res.on('data', (d) => {
+      data = data + d;
     });
+    res.on('end', () => {
+      data = data.toString();
+      if (data.includes(`Licensed to YouTube by`)) { return; }
+      if (data.includes('Unlisted')) { return; }
+      if (data.includes('Age-restricted')) { return; }
+      const newData = JSON.stringify({
+        html: videoId,
+      });
+      wsBroadcast(newData);
+    });
+  });
 
 };
 const wsSkip = () => {
-  if(!limited) {
-  limited = true;
-  setTimeout(function() {
-    limited = false;
-  }, 5000);
+  if (!limited) {
+    limited = true;
+    setTimeout(function () {
+      limited = false;
+    }, 5000);
     const newData = JSON.stringify({
       skip: 'skip',
     });
