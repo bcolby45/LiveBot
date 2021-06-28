@@ -41,8 +41,10 @@ source.onopen = (event) => {
     const httpCheck = check.slice(0, 4);
     if (httpCheck.match('http')) {
       wsHtml(check);
-    } else if (httpCheck.match(`www.\g`) || httpCheck.match(`skip\g`)) {
+    } else if (httpCheck.match(`www.\g`)) {
       wsHtml(check);
+    } else if (httpCheck.match(`skip\g`)) {
+      wsSkip();
     } else {
       wsAlert(info.message);
     }
